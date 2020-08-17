@@ -14,7 +14,7 @@ var data = '';
 
 let promiseStart = new Promise((resove, reject)=>{
     bot.onText(/\/start/, msg=>{
-        if (phone !="/start")
+        
         bot.sendMessage(msg.chat.id, "Добро пожаловать! Подтвердите свою личность /auth ");
         
         
@@ -73,6 +73,18 @@ let pormiseInfo = new Promise((resove, reject)=>{
         }
         else bot.sendMessage(msg.chat.id, 'вы не авторизованы!')
 
+    })
+
+
+})
+let pormiseExit = new Promise((resove, reject)=>{
+    
+    bot.onText(/\/exit/, msg=>{
+        phone ='';
+        auth = false;
+        ewUrl='';
+        data = '';
+        bot.sendMessage(msg.chat.id, 'Всего доброго!')
     })
 
 
