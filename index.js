@@ -7,11 +7,11 @@ const token = '1356849321:AAGYRYMGBGnnOzJCubrm2B3reK2qWZNXXV8'; // токен б
 const bot = new TelegramBot(token, {
 	polling: true
 });
-//объявление переменных
-var url = 'http://localhost/InfoBase/hs/Demo/List/'
+//объявление глобальных переменных
+var url = ''
 var phone = '';
 var newUrl = '';
-var data = '';
+var dataJSON = '';
 var response = '';
 var auth = false;
 //создание промиса 
@@ -21,7 +21,7 @@ var promiseTelegramBot = new Promise((resove, regect) => {
 //команда start
 promiseTelegramBot.then(function(resove) {
 		return resove = bot.onText(/\/start/, msg => {
-			bot.sendMessage(msg.chat.id, "Добро пожаловать! Подтвердите свою личность /auth ");
+			bot.sendMessage(msg.chat.id, "Добро пожаловать, "+ msg.chat.first_name +" для авторизации введите команду /auth ");
 		})
 	})
 	// команда auth
@@ -37,17 +37,17 @@ promiseTelegramBot.then(function(resove) {
 	}).then(bot.on('message', msg => {
 			phone = msg.text;
 			if (phone.match(/^\d+$/)) {
-				url = 'http://localhost/InfoBase/hs/Demo/List/' + phone;
+				url = 'http://localhost/DemoRetail1/hs/tlg//List/' + phone;
+				//url = 'http://localhost/InfoBase/hs/Demo/List/' + phone;
 				newUrl = url;
 				dataReq()
 				async function dataReq() {
 					response = await fetch(newUrl);
 					if (response.ok) {
 						let json = await response.text();
-						data = json;
+						dataJSON = json;
 						auth = true;
-						return bot.sendMessage(msg.chat.id, 'Чтоб узнать балнас введите /info');
-						//console.log(count)	
+						return bot.sendMessage(msg.chat.id, 'Чтоб узнать сколько осталось бонусов на вашей дисконтной карте, введите команду /info');
 					} else if (!response.ok && auth == false) {
 						bot.sendMessage(msg.chat.id, 'Номер введен не правильно или не зарегестрирован');
 					} else bot.sendMessage(msg.chat.id, 'вы авторизованы');
@@ -58,8 +58,8 @@ promiseTelegramBot.then(function(resove) {
 	// команда info
 promiseTelegramBot.then(function(resove) {
 		return resove = bot.onText(/\/info/, msg => {
-			if (data != '') {
-				bot.sendMessage(msg.chat.id, data)
+			if (dataJSON != '') {
+				bot.sendMessage(msg.chat.id, dataJSON)
 			} else bot.sendMessage(msg.chat.id, 'вы не авторизованы!')
 		})
 	})
@@ -68,8 +68,9 @@ promiseTelegramBot.then(function(resove) {
 	return resove = bot.onText(/\/exit/, msg => {
 		auth = false;
 		phone = '';
+		url='';
 		newUrl = '';
-		data = '';
+		dataJSON = '';
 		response = '';
 		bot.sendMessage(msg.chat.id, 'Всего доброго!')
 	})
