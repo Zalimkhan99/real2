@@ -1,9 +1,13 @@
 process.env.NTBA_FIX_319 = 1;
 //подключение модулей
+
 const fetch = require("node-fetch");
 const TelegramBot = require('node-telegram-bot-api');
-const await = require('await')
-const token = '1356849321:AAGYRYMGBGnnOzJCubrm2B3reK2qWZNXXV8'; // токен бота телеграм
+const express   =    require("express");
+const mysql = require('mysql');
+const await = require('await');
+
+var token = '1356849321:AAGYRYMGBGnnOzJCubrm2B3reK2qWZNXXV8'; // токен бота телеграм
 const bot = new TelegramBot(token, {
 	polling: true
 });
@@ -76,3 +80,6 @@ promiseTelegramBot.then(function(resove) {
 		bot.sendMessage(msg.chat.id, 'Всего доброго!')
 	})
 })
+
+
+
