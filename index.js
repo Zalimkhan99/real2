@@ -1,9 +1,8 @@
 process.env.NTBA_FIX_319 = 1;
 //подключение модулей
-
 const fetch = require("node-fetch");
 const TelegramBot = require('node-telegram-bot-api');
-const express   =    require("express");
+const express = require("express");
 const mysql = require('mysql');
 const await = require('await');
 
@@ -12,14 +11,13 @@ const bot = new TelegramBot(token, {
 	polling: true
 });
 //объявление глобальных переменных
-
 var url = ''
 var phone = '';
 var newUrl = '';
 var dataJSON = '';
 var response = '';
 var auth = false;
-var sendMs= 'https://api.telegram.org/bot1356849321:AAGYRYMGBGnnOzJCubrm2B3reK2qWZNXXV8/sendMessage?chat_id=315069916&text= работает ';
+//var sendMs = 'https://api.telegram.org/bot1356849321:AAGYRYMGBGnnOzJCubrm2B3reK2qWZNXXV8/sendMessage?chat_id=315069916&text= работает ';
 //создание промиса 
 var promiseTelegramBot = new Promise((resove, regect) => {
 	setTimeout(() => resove(1), 1000);
@@ -27,9 +25,19 @@ var promiseTelegramBot = new Promise((resove, regect) => {
 //команда start
 promiseTelegramBot.then(function(resove) {
 		return resove = bot.onText(/\/start/, msg => {
-			
-			bot.sendMessage(msg.chat.id, "Добро пожаловать, "+ msg.chat.first_name +" для авторизации введите команду /auth ");
+			const conn = mysql.createConnection({
+				host: "localhost",
+				user: "root",
+				database: "real2",
+				password: ""
+			})
+			let user_id = msg.chat.id;
+			const sql = `INSERT INTO userstelegram(ChartID) VALUES( ${user_id} )`;
+			let query = "SELECT * FROM userstelegram";
+			conn.query("SET SESSION wait_timeout = 604800");
 
+			conn.query(sql, (err, result, field) => {})
+			bot.sendMessage(msg.chat.id, "Добро пожаловать, " + msg.chat.first_name + " для авторизации введите команду /auth ");
 		})
 	})
 	// команда auth
@@ -76,58 +84,10 @@ promiseTelegramBot.then(function(resove) {
 	return resove = bot.onText(/\/exit/, msg => {
 		auth = false;
 		phone = '';
-		url='';
+		url = '';
 		newUrl = '';
 		dataJSON = '';
 		response = '';
 		bot.sendMessage(msg.chat.id, 'Всего доброго!')
 	})
 })
-
-
-
-
-
-
-	
-bot.onText(/\/start1/, msg => {
-	
-	const conn = mysql.createConnection({
-		host: "localhost",
-		user: "root",
-		database: "real2",
-		password: ""
-	})
-	conn.connect(err=>{
-		if(err){
-			//console.log(err);
-			return err;
-		}
-		else{
-			//console.log('Database ------ OK');
-		}
-	});
-	
-	var s = msg.chat.id;
-
-const sql =  `INSERT INTO userstelegram(ChartID) VALUES( ${s} )`;
-let query = "SELECT * FROM userstelegram";
-conn.query(sql, (err,result, field)=>{
-    //console.log(err);
-   // console.log(result);
-})
-
-
-	
-/*conn.end(err=>{
-    if(err){
-        console.log(err);
-        return err;
-    }
-    else{
-        //console.log('Database ------ close');
-    }
-})*/
-
-})
-
