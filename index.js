@@ -12,6 +12,7 @@ const bot = new TelegramBot(token, {
 	polling: true
 });
 //объявление глобальных переменных
+
 var url = ''
 var phone = '';
 var newUrl = '';
@@ -26,7 +27,9 @@ var promiseTelegramBot = new Promise((resove, regect) => {
 //команда start
 promiseTelegramBot.then(function(resove) {
 		return resove = bot.onText(/\/start/, msg => {
+			
 			bot.sendMessage(msg.chat.id, "Добро пожаловать, "+ msg.chat.first_name +" для авторизации введите команду /auth ");
+
 		})
 	})
 	// команда auth
@@ -82,4 +85,49 @@ promiseTelegramBot.then(function(resove) {
 })
 
 
+
+
+
+
+	
+bot.onText(/\/start1/, msg => {
+	
+	const conn = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		database: "real2",
+		password: ""
+	})
+	conn.connect(err=>{
+		if(err){
+			//console.log(err);
+			return err;
+		}
+		else{
+			//console.log('Database ------ OK');
+		}
+	});
+	
+	var s = msg.chat.id;
+
+const sql =  `INSERT INTO userstelegram(ChartID) VALUES( ${s} )`;
+let query = "SELECT * FROM userstelegram";
+conn.query(sql, (err,result, field)=>{
+    //console.log(err);
+   // console.log(result);
+})
+
+
+	
+/*conn.end(err=>{
+    if(err){
+        console.log(err);
+        return err;
+    }
+    else{
+        //console.log('Database ------ close');
+    }
+})*/
+
+})
 
